@@ -1,0 +1,42 @@
+
+
+--Snowflake Terraform
+
+mkdir snowflake-terraform && cd snowflake-terraform
+
+C:\AK- Learnings\Terraform\snowflake-terraform>git init
+Initialized empty Git repository in C:/AK- Learnings/Terraform/snowflake-terraform/.git/
+
+echo "# Snowflake Terraform Project" > README.md
+
+cd ~/.ssh  # Or any secure directory
+openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_tf_key.p8 -nocrypt
+openssl rsa -in snowflake_tf_key.p8 -pubout -out snowflake_tf_key.pub
+
+The .p8 file is your private key (keep it secret!).
+The .pub file is the public key.
+
+
+
+Snowflake:
+=========
+USE ROLE ACCOUNTADMIN;
+
+CREATE USER IF NOT EXISTS TERRAFORM_SVC
+  RSA_PUBLIC_KEY = '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwsoZPH7ReTe4KpBxUfnD
+m+5IvNe3AZGRWtmFWEEbZV+TmO9Q0kfpWrWsvIIZTf0+3FBBLu5RxbRARmDTACAz
+F6zds2HWDEQHoXaufnUJczaNrxHD6fVCSl0IxkNmpi11+asdvU6eTD8dmH13WtIl
+5iq/IRDG4q4Wz55DsCb5HZfwaQY1bXBC6a+rJEQy1JK0WMKrkOqS7bEjbDsXthFz
+P4MgjWyUxLRCmvDUQ3IFcsbpJ7y9JgqVaXMLHCXpSvJ5iKUODmru4tTSrx69Puty
+rEweQtgvsuO2jAIgtt3+CW4dMBe4EpPprU99C+7dyl/BpigWUGDCph2TS40RsMgw
+QQIDAQAB
+-----END PUBLIC KEY-----'
+  DEFAULT_ROLE = SYSADMIN
+  COMMENT = 'Service user for Terraform';
+
+GRANT ROLE SYSADMIN TO USER TERRAFORM_SVC;
+GRANT ROLE SECURITYADMIN TO USER TERRAFORM_SVC;
+
+
+
