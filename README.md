@@ -1,0 +1,1 @@
+"# Snowflake Terraform Project" 
